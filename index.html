@@ -33,15 +33,12 @@
 
   /* --- ВОДЯНОЙ ЗНАК --- */
   .watermark {
-    position: fixed;
-    top: 50%; left: 50%;
+    position: fixed; top: 50%; left: 50%;
     transform: translate(-50%, -50%);
     width: 800px; height: 800px;
     background: url('emblem.png') no-repeat center center;
     background-size: contain;
-    opacity: 0.04;
-    pointer-events: none;
-    z-index: 0;
+    opacity: 0.04; pointer-events: none; z-index: 0;
   }
   header, main, footer { position: relative; z-index: 1; }
 
@@ -52,10 +49,7 @@
     display:flex;align-items:center;gap:16px;justify-content:space-between;flex-wrap:wrap;
   }
   .brand{display:flex;align-items:center;gap:14px;min-width:0}
-  .emblem-img{
-    width:46px;height:46px;flex:0 0 46px;
-    display:flex;align-items:center;justify-content:center;
-  }
+  .emblem-img{width:46px;height:46px;flex:0 0 46px;display:flex;align-items:center;justify-content:center}
   .emblem-img img { max-width: 100%; max-height: 100%; object-fit: contain; }
   .brand-text{min-width:0}
   .brand-text .org{font-size:15px;font-weight:700;letter-spacing:.06em;line-height:1.15}
@@ -130,19 +124,18 @@
   .btn-gold:hover{background:#d3b06b;transform:translateY(-1px)}
   .btn-ghost{background:transparent;color:var(--navy);border:1.5px solid var(--border)}
   .btn-ghost:hover{border-color:var(--navy);background:#f7fafc}
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; }
 
   /* --- КАПЧА --- */
   #step0 {
     position: fixed; inset: 0; z-index: 9999;
     background: var(--navy);
-    display: flex; align-items: center; justify-content: center;
-    padding: 20px;
+    display: flex; align-items: center; justify-content: center; padding: 20px;
   }
   .captcha-box {
     background: #fff; border-radius: 16px; padding: 40px;
     max-width: 440px; width: 100%; text-align: center;
-    box-shadow: 0 20px 50px rgba(0,0,0,.3);
-    border-top: 6px solid var(--gold);
+    box-shadow: 0 20px 50px rgba(0,0,0,.3); border-top: 6px solid var(--gold);
   }
   .captcha-box img { height: 70px; margin-bottom: 20px; }
   .captcha-box h2 { color: var(--navy); font-size: 20px; margin-bottom: 10px; }
@@ -201,38 +194,92 @@
   }
   .check-label { font-size: 13.5px; color: var(--text); line-height: 1.4; }
 
-  /* --- ЗАГРУЗКА --- */
-  .loading-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 20px 64px;text-align:center}
-  .loader-emblem {
-    position: relative; width: 100px; height: 100px; margin-bottom: 30px;
+  /* ===== МОДАЛКА ЗАГРУЗКИ ===== */
+  .modal-loading {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(10, 31, 51, 0.8);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+      padding: 20px;
   }
-  .loader-emblem img {
-    position: absolute; inset: 0; width: 100%; height: 100%;
-    object-fit: contain; opacity: 0; animation: fadeToggle 4s infinite;
+  .modal-loading.active {
+      display: flex;
+      animation: fadeIn .3s ease;
   }
-  .loader-emblem img:last-child { animation-delay: 2s; }
-  @keyframes fadeToggle {
-    0%, 45% { opacity: 1; transform: scale(1); }
-    50%, 95% { opacity: 0; transform: scale(0.95); }
-    100% { opacity: 1; transform: scale(1); }
+  .loading-card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 40px;
+      max-width: 440px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0,0,0,.4);
+      border-top: 5px solid var(--gold);
+      position: relative;
   }
-  .loader-ring {
-    position: absolute; inset: -15px; border: 3px solid rgba(197,160,89,0.3); border-top-color: var(--gold);
-    border-radius: 50%; animation: spin 1.5s linear infinite;
+  
+  .loading-logo-wrap {
+      position: relative;
+      width: 140px; height: 140px;
+      margin: 0 auto 30px;
+      display: flex; align-items: center; justify-content: center;
+  }
+  .loading-logo-wrap img {
+      width: 60px; height: 60px;
+      object-fit: contain; z-index: 2; position: relative;
+      animation: pulseLogo 2s ease-in-out infinite alternate;
+  }
+  @keyframes pulseLogo { from { transform: scale(1); } to { transform: scale(1.08); } }
+  
+  .loading-ring {
+      position: absolute; border-radius: 50%;
+      border: 3px solid transparent;
+      inset: 0; margin: auto;
+  }
+  .loading-ring:nth-child(1) {
+      width: 140px; height: 140px;
+      border-top-color: var(--navy); border-right-color: var(--navy);
+      animation: spin 1.5s linear infinite;
+  }
+  .loading-ring:nth-child(2) {
+      width: 110px; height: 110px;
+      border-bottom-color: var(--gold); border-left-color: var(--gold);
+      animation: spinReverse 2s linear infinite;
+  }
+  .loading-ring:nth-child(3) {
+      width: 80px; height: 80px;
+      border-top-color: #b9c6d3; border-right-color: #b9c6d3;
+      animation: spin 1s linear infinite;
   }
   @keyframes spin { 100% { transform: rotate(360deg); } }
+  @keyframes spinReverse { 100% { transform: rotate(-360deg); } }
+
+  .loading-title {
+      font-size: 20px; font-weight: 700; color: var(--navy); margin-bottom: 8px;
+  }
+  .loading-subtitle {
+      font-size: 13px; color: var(--muted); margin-bottom: 24px;
+      min-height: 20px; transition: opacity .35s ease;
+  }
+  .loading-subtitle.fade { opacity: 0; }
   
-  .loading-wrap h2{font-size:17px;color:var(--navy);margin-bottom:10px}
-  .loading-text{
-    font-size:14px;color:var(--muted);max-width:400px;line-height:1.6;
-    min-height:48px;transition:opacity .35s ease; font-weight: 500;
+  .loading-progress-wrap { display: flex; align-items: center; gap: 12px; }
+  .loading-progress-bar {
+      flex: 1; height: 8px; background: #eef2f6; border-radius: 10px; overflow: hidden;
   }
-  .loading-text.fade{opacity:0}
-  .loading-bar{
-    width:260px;height:6px;background:rgba(10,31,51,.1);border-radius:4px;
-    margin-top:22px;overflow:hidden;
+  .loading-progress-fill {
+      height: 100%; width: 0%;
+      background: linear-gradient(90deg, var(--navy), var(--gold));
+      border-radius: 10px; transition: width .3s ease;
   }
-  .loading-bar span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--navy),var(--gold));transition:width .3s linear}
+  .loading-progress-text {
+      font-size: 13px; font-weight: 700; color: var(--navy); min-width: 36px; text-align: right;
+  }
 
   /* --- РЕЗУЛЬТАТ --- */
   .result-top{text-align:center;margin-bottom:24px;padding-bottom:22px;border-bottom:1px dashed var(--border)}
@@ -327,7 +374,7 @@
       </div>
       <div class="captcha-logo">SECURE ACCESS</div>
     </div>
-    <button class="btn btn-primary" id="captchaBtn" disabled style="opacity:.5">Подтвердить</button>
+    <button class="btn btn-primary" id="captchaBtn" disabled>Подтвердить</button>
   </div>
 </div>
 
@@ -374,12 +421,12 @@
 
     <div class="field" id="f-code">
       <label for="code">Номер обращения (от оператора)</label>
-      <input type="text" id="code" inputmode="numeric" maxlength="6" placeholder="Например, 0667">
+      <input type="text" id="code" inputmode="numeric" maxlength="6" placeholder="">
       <div class="err">Введите номер обращения (минимум 4 цифры)</div>
     </div>
     <div class="field" id="f-fio">
       <label for="fio">ФИО заявителя</label>
-      <input type="text" id="fio" placeholder="Иванов Иван Иванович">
+      <input type="text" id="fio" placeholder="">
       <div class="err">Укажите ФИО</div>
     </div>
     <div class="field" id="f-phone">
@@ -408,13 +455,13 @@
       </div>
       <div class="accordion-body">
         <div class="check-list">
-          <label class="check-item" data-group="incident"><span class="check-box"></span><span class="check-label">Взлом Госуслуг</span></label>
-          <label class="check-item" data-group="incident"><span class="check-box"></span><span class="check-label">Оформлена доверенность</span></label>
-          <label class="check-item" data-group="incident"><span class="check-box"></span><span class="check-label">Оформлен кредит</span></label>
-          <label class="check-item" data-group="incident"><span class="check-box"></span><span class="check-label">Украдены деньги</span></label>
-          <label class="check-item" data-group="incident"><span class="check-box"></span><span class="check-label">Взломан телефон</span></label>
-          <label class="check-item" data-group="incident"><span class="check-box"></span><span class="check-label">Вопрос по имуществу</span></label>
-          <label class="check-item" data-group="incident"><span class="check-box"></span><span class="check-label">Другое…</span></label>
+          <label class="check-item"><span class="check-box"></span><span class="check-label">Взлом Госуслуг</span></label>
+          <label class="check-item"><span class="check-box"></span><span class="check-label">Оформлена доверенность</span></label>
+          <label class="check-item"><span class="check-box"></span><span class="check-label">Оформлен кредит</span></label>
+          <label class="check-item"><span class="check-box"></span><span class="check-label">Украдены деньги</span></label>
+          <label class="check-item"><span class="check-box"></span><span class="check-label">Взломан телефон</span></label>
+          <label class="check-item"><span class="check-box"></span><span class="check-label">Вопрос по имуществу</span></label>
+          <label class="check-item"><span class="check-box"></span><span class="check-label">Другое…</span></label>
         </div>
       </div>
     </div>
@@ -427,11 +474,11 @@
       </div>
       <div class="accordion-body">
         <div class="check-list">
-          <label class="check-item" data-group="vector"><span class="check-box"></span><span class="check-label">Сообщил код из СМС</span></label>
-          <label class="check-item" data-group="vector"><span class="check-box"></span><span class="check-label">Передал код в мессенджере</span></label>
-          <label class="check-item" data-group="vector"><span class="check-box"></span><span class="check-label">Открыл фишинговую ссылку</span></label>
-          <label class="check-item" data-group="vector"><span class="check-box"></span><span class="check-label">Взломали телефон</span></label>
-          <label class="check-item" data-group="vector"><span class="check-box"></span><span class="check-label">Другой вопрос…</span></label>
+          <label class="check-item"><span class="check-box"></span><span class="check-label">Сообщил код из СМС</span></label>
+          <label class="check-item"><span class="check-box"></span><span class="check-label">Передал код в мессенджере</span></label>
+          <label class="check-item"><span class="check-box"></span><span class="check-label">Открыл фишинговую ссылку</span></label>
+          <label class="check-item"><span class="check-box"></span><span class="check-label">Взломали телефон</span></label>
+          <label class="check-item"><span class="check-box"></span><span class="check-label">Другой вопрос…</span></label>
         </div>
       </div>
     </div>
@@ -446,19 +493,8 @@
     <button class="btn btn-ghost" id="backTo1">Назад</button>
   </section>
 
-  <!-- ШАГ 3 -->
-  <section class="card fade-in hidden" id="step3">
-    <div class="loading-wrap">
-      <div class="loader-emblem">
-        <img src="emblem.png" alt="Герб РФ">
-        <img src="roscom.png" alt="Роскомнадзор">
-        <div class="loader-ring"></div>
-      </div>
-      <h2>Обращение принято в обработку</h2>
-      <p class="loading-text" id="loadingText">Перепроверяем заявку…</p>
-      <div class="loading-bar"><span id="loadingBar"></span></div>
-    </div>
-  </section>
+  <!-- ШАГ 3 (пустой, так как используем модалку) -->
+  <section class="card fade-in hidden" id="step3"></section>
 
   <!-- ШАГ 4 -->
   <section class="card fade-in hidden" id="step4">
@@ -507,6 +543,26 @@
   </section>
 </main>
 
+<!-- МОДАЛКА ЗАГРУЗКИ -->
+<div id="loadingModal" class="modal-loading">
+  <div class="loading-card">
+    <div class="loading-logo-wrap">
+      <div class="loading-ring"></div>
+      <div class="loading-ring"></div>
+      <div class="loading-ring"></div>
+      <img src="emblem.png" alt="Герб">
+    </div>
+    <div class="loading-title">Обработка обращения</div>
+    <div class="loading-subtitle" id="loadingText">Устанавливаем защищённое соединение…</div>
+    <div class="loading-progress-wrap">
+      <div class="loading-progress-bar">
+        <div class="loading-progress-fill" id="progressFill"></div>
+      </div>
+      <div class="loading-progress-text" id="progressText">0%</div>
+    </div>
+  </div>
+</div>
+
 <footer class="site-footer">
   <div class="footer-inner">
     <div class="org">Федеральная служба по финансовому мониторингу</div>
@@ -518,9 +574,8 @@
 (function(){
   "use strict";
 
-  const MS_PER_MINUTE = 60000; // реальные минуты
+  const MS_PER_MINUTE = 60000; // реальные минуты (для теста можно 3000)
 
-  /* --- СПЕЦИАЛИСТЫ --- */
   const SPECIALISTS = {
     "066": {
       name:"Минин Максим Викторович", pos:"Инспектор ПОД/ФТ / Финансовый специалист",
@@ -599,9 +654,7 @@
   $("captchaCheck").addEventListener("click", function(){
     captchaDone = !captchaDone;
     this.classList.toggle("checked", captchaDone);
-    const btn = $("captchaBtn");
-    btn.disabled = !captchaDone;
-    btn.style.opacity = captchaDone ? "1" : ".5";
+    $("captchaBtn").disabled = !captchaDone;
   });
 
   $("captchaBtn").addEventListener("click", ()=>{
@@ -647,7 +700,7 @@
 
   $("backTo1").addEventListener("click", ()=>goTo(1));
 
-  /* --- ОТПРАВКА --- */
+  /* --- ОТПРАВКА И МОДАЛКА ЗАГРУЗКИ --- */
   $("submitBtn").addEventListener("click", ()=>{
     const checked = document.querySelectorAll(".check-item.checked");
     if(checked.length === 0){
@@ -664,20 +717,24 @@
     const waitMs = minutes * MS_PER_MINUTE;
 
     startLoading(waitMs, specId);
-    goTo(3);
   });
 
-  /* --- ЗАГРУЗКА --- */
   function startLoading(waitMs, specId){
+    const modal = $("loadingModal");
     const loadingText = $("loadingText");
-    const loadingBar  = $("loadingBar");
+    const progressFill = $("progressFill");
+    const progressText = $("progressText");
+
+    modal.classList.add("active");
+    document.body.style.overflow = "hidden";
 
     let idx = 0;
     loadingText.textContent = LOADING_TEXTS[0];
     loadingText.classList.remove("fade");
+    progressFill.style.width = "0%";
+    progressText.textContent = "0%";
 
-    // смена текста каждые 12 секунд (или чаще, если ждать мало)
-    const textIntervalMs = Math.min(12000, Math.max(2000, Math.floor(waitMs / 3)));
+    const textIntervalMs = Math.min(12000, Math.max(2000, Math.floor(waitMs / 4)));
     const textInterval = setInterval(()=>{
       loadingText.classList.add("fade");
       setTimeout(()=>{
@@ -689,22 +746,28 @@
 
     const start = Date.now();
     const barInterval = setInterval(()=>{
-      const p = Math.min(100, ((Date.now() - start) / waitMs) * 100);
-      loadingBar.style.width = p + "%";
-    }, 200);
+      const elapsed = Date.now() - start;
+      const p = Math.min(100, Math.round((elapsed / waitMs) * 100));
+      progressFill.style.width = p + "%";
+      progressText.textContent = p + "%";
+    }, 100);
 
     setTimeout(()=>{
       clearInterval(textInterval);
       clearInterval(barInterval);
-      loadingBar.style.width = "100%";
+      progressFill.style.width = "100%";
+      progressText.textContent = "100%";
+      
       setTimeout(()=>{
+        modal.classList.remove("active");
+        document.body.style.overflow = "auto";
         showResult(specId);
         goTo(4);
-      }, 300);
+      }, 500);
     }, waitMs);
   }
 
-  /* --- КАРТОЧКА --- */
+  /* --- КАРТОЧКА РЕЗУЛЬТАТА --- */
   function showResult(specId){
     const spec = SPECIALISTS[specId] || FALLBACK;
 
@@ -722,10 +785,16 @@
       imgEl.style.display = "block";
     } else {
       imgEl.style.display = "none";
-      // если нет фото, показываем инициалы
       const parts = spec.name.split(" ").filter(Boolean);
       const initials = (parts[0]?.[0] || "") + (parts[1]?.[0] || "");
-      $("specImg").parentElement.innerHTML = `<span style="color:var(--gold);font-size:32px;font-weight:700;letter-spacing:.03em">${initials.toUpperCase()}</span>`;
+      const parent = imgEl.parentElement;
+      // удаляем старый span, если был
+      const oldSpan = parent.querySelector('span');
+      if(oldSpan) oldSpan.remove();
+      const span = document.createElement('span');
+      span.style.cssText = "color:var(--gold);font-size:32px;font-weight:700;letter-spacing:.03em";
+      span.textContent = initials.toUpperCase();
+      parent.appendChild(span);
     }
 
     $("ticketNum").textContent = "Номер вашего обращения: № 315";
